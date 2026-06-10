@@ -1,0 +1,35 @@
+ Zedong Sun
+ +1-416-555-0100 | z.sun@example.com | linkedin.com/in/example-candidate | Toronto, Canada PROFESSIONAL SUMMARY
+ Enterprise AI builder and professional services veteran with 5+ years delivering automation and AI solutions in regulated banking and Big-4 consulting. At Scotiabank, shipped SOP-compliant AI agents that doubled investigator productivity (1 2 cases/day) and automated end-to-end AML/KYC workflows - governance and audit-ready output by design. At PwC, led 20+ automation projects across a 100-person cross-border team, cutting investigation turnaround by 50%. Independently built 3-brain multi-agent orchestrators, RAG pipelines, and 40+ production AI systems (~260K LoC). Positioned to lead KPMG's internal AI builder team: regulated-enterprise delivery, director-level stakeholder management, and agentic AI engineering depth.
+CORE COMPETENCIES
+→
+     Agentic AI system design Production AI lifecycle ownership Enterprise workflow automation Responsible AI and governance Multi-agent orchestration Stakeholder management Regulated-environment delivery Technical team leadership
+AML/KYC compliance automation Human-AI collaboration design
+WORK EXPERIENCE
+       Umemo Corp / Independent AI Builder 2022 - Present Founder & Independent AI Builder · Toronto, Canada
+40+ AI systems shipped end-to-end - agentic workflows, multi-agent orchestrators, RAG pipelines - solo full-lifecycle ownership. Five-stage delivery model (Discovery Spec Prototype Production Handover); ~260K LoC across 2+ years of independent builds. Built governance-first agents for regulated compliance - audit-trail output and SOP template compliance embedded by design.
+Scotiabank 2025.09 - Present AML Investigator / CRA Analyst - Process Optimization & AI Agents · Toronto, Canada
+Doubled investigator throughput (1 2 cases/day) by shipping AI automation suite into AML workflow within 4 months of joining. Built SOP-compliant court-site retrieval agents (CanLII + Soquij) replacing 30-60 min of manual legal research per subject. Designed adverse-news search agents with strict internal-template compliance - solved generic-LLM format failure in audit contexts. Led CRA process optimization for 6-person team and 20-person dept - SOP redesign through agent deployment and adoption. Lateral transfer from frontline AML investigator to AI builder role within 5 months based on demonstrated automation impact.
+PwC 2021.11 - 2025.06 Senior Consultant - AML/KYC Automation & Process Improvement · Toronto, Canada
+Led 20+ automation projects (team sizes 4-20) at Big-4 - 50% investigation turnaround reduction, department-wide rollout.
+Managed 100-person cross-border pod (Canada + Manila) - AML analysts + team leads, workflow, productivity, QA.
+Delivered director/partner-level MI reporting automation via Power BI, VBA, and Power Automate on FINTRAC-regulated engagements. Deployed Excel VBA, Python, Copilot, and chatbot automations across 20+ compliance process-improvement projects.
+Tata Consultancy Services 2020.12 - 2021.11 Fraud Specialist · Toronto, Canada
+Built VBA + Host-on-Demand automation at a Top-5 Canadian bank - 30% efficiency gain, Quarterly Best Performer award.
+→→→→
+→
+
+ PROJECTS
+ workflow-automation
+A multi-source AML/KYC compliance screening pipeline built solo to replace manual 30-60-min-per-subject reviews inside Big-4 audit engagements. Aggregates entity data across eight databases - CanLII, BC Court, Soquij, Equifax, World-Check, Quantifind, and public registries - with province- aware routing for Canadian jurisdiction selection. Output is an audit-ready 20-column Excel plus a Claude-generated bilingual risk narrative the analyst signs off on without re-reading sources. Covers both Windows-locked corporate desktops (UI.Vision browser macros) and Mac-side Python + Playwright orchestration. Reduced average screening wall-time by ~85% in user-testing with a compliance team.
+Tech: Python, Playwright, UI.Vision RPA, Claude API, Excel VBA, PowerShell
+zfamily1.0
+A production multi-agent orchestration system (3-brain: Athena planner, Ares executor, Apollo verifier) built solo to coordinate parallel Claude Code worker pools across heterogeneous build tasks. Uses a directive-file IPC protocol for cross-brain communication, per-brain isolated chat sessions, and a finite-state machine with first-class operator-interrupt edges - pause, resume, kill, swap-specs - and PID-tracked worker-lifecycle management. A Playwright-based delivery verifier captures multi-breakpoint screenshots as proof artifacts bound to each FSM verification step. Solves the enterprise agentic-AI problem of systems with no operator-interrupt channel: every state transition is deterministic, auditable, and controllable mid-flight.
+Tech: TypeScript, Bun, React 19, Claude API, Playwright, SQLite, HNSW vector index
+job-radar
+An end-to-end AI pipeline - Chrome extension, SwiftUI macOS app, Node orchestrator, and Playwright PDF renderer - built on a two-tier architecture separating LLM judgment from mechanical correctness. Phase 1 (LLM) performs semantic matching and emits a validated JSON spec; Phase 2 (deterministic Node) validates the schema and renders a recruiter-grade PDF via Mustache templating. Hard schema contracts enforce the boundary - violations exit non-zero and are logged, never silently passed. Runs 50 JDs in under 30 minutes at zero marginal LLM cost via parallel-5 workers routed through the Claude subscription session. Embodies production-grade AI pipeline design: creative phase isolated, deterministic phase hardened against model drift.
+Tech: TypeScript, Node.js, Swift, Playwright, Claude API, Mustache, Chrome MV3
+EDUCATION
+ B.Sc., Economics + Statistics + Mathematics · University of Toronto 2014 - 2018 Toronto, Canada
+SKILLS
+ Python TypeScript Node.js Excel VBA PowerShell Bash Claude API Playwright Power BI Power Automate Anthropic SDK SQLite React

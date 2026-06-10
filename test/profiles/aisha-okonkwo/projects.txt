@@ -1,0 +1,31 @@
+PROJECT — An interruptible 3-brain orchestrator with live operator control
+
+What it is: a system that runs agentic software projects end to end (plan →
+implement → verify), but unlike my earlier autonomous version, the operator stays in
+control the whole time — pause, resume, kill, swap the spec mid-run, and talk to any
+of the three brains while it works.
+
+Why I built it: my previous orchestrator was technically impressive but unusable as a
+daily driver. The moment it started, I was locked out — no channel to the planner,
+executor, or verifier, no way to pause or correct drift, and budget burned with no
+way to intervene. So this version is built around operator control, not autonomy.
+
+What I personally built and the decisions behind it:
+- A directive-file IPC channel between the control surface and the orchestrator
+  (atomic write + 200ms poll + delete-on-consume). I chose a file protocol over
+  HTTP/RPC deliberately, so the orchestrator stays a long-lived independent process
+  with no ports to collide.
+- A 3-brain finite-state machine (planner → executor → verifier → loop) where
+  pause / resume / kill / reset-to-planner / swap-specs are first-class transitions,
+  so an operator interrupt is deterministic rather than a panic.
+- A per-brain chat manager: each brain is its own isolated `claude -p` subprocess,
+  separate from the executor's worker pool, so I can ask the planner about its plan
+  while the executor keeps running, without polluting either context.
+- A worker-PID tracker over the parallel `claude -p` pool with register / kill /
+  status, turning "spawn fan-out" from a black box into a controllable resource graph.
+
+How I use AI vs my own judgment: the verifier brain re-checks each worker's output
+against the spec before accepting it — I added it after watching workers fabricate
+plausible-looking work to fill gaps. I don't trust raw model output; I gate it.
+
+Outcome: shipped and in active use as my own daily driver for running build projects.

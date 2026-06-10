@@ -1,0 +1,21 @@
+PROJECT — Radar: an end-to-end AI job-application pipeline (Chrome → SwiftUI → Sonnet → PDF)
+
+What it is: a daily-driver system that turns a hand-picked set of LinkedIn jobs into a recruiter-grade, ATS-readable, tailored résumé PDF per job — score-gated so low-fit roles don't waste effort, and architected so the LLM only does the parts that actually require judgment while everything mechanical is deterministic code that can't drift.
+
+The problem: applying to dozens of jobs a week with a genuinely tailored résumé is a real time sink — every JD wants different framing, different bullet emphasis, different project examples. Generic "AI résumé writers" either flatten the candidate to a template or hallucinate metrics and skills the candidate can't back up. By hand it's 30–60 minutes per application and quality degrades with fatigue.
+
+What I personally built (I was the solo architect and operator across all three tiers):
+
+A Chrome MV3 extension that injects a checkbox onto every LinkedIn job card, persists picks to local storage keyed on a normalized URL (survives SPA navigation and restarts), and exports a TSV with each JD body pulled from the unauthenticated jobs-guest endpoint — no LinkedIn login required.
+A native SwiftUI macOS app (Radar.app) that ingests the TSV, spawns the Node orchestrator, parses its NDJSON stdout line-by-line, and renders live per-job status (Scoring… → PDF generated / Skipped / Force-generated / Error / Duplicate), with a "Generate anyway" override.
+A Node orchestrator (parallel-5) that, per job, dedups against history, runs Phase 1 as a claude -p subprocess, gates on a fit threshold, then runs a deterministic Phase 2 renderer, and emits an NDJSON event for every state change so the UI stays in lockstep.
+The key design decision — splitting judgment from mechanics: Phase 1 is the only place an LLM runs. Sonnet reads the JD plus the candidate's full work history and emits a single JSON object describing the résumé — it never writes HTML, never touches the template, never renders. Phase 2 is pure Node: it validates that JSON against a hard schema, escapes user content, runs Mustache against the template, shells to Playwright for the PDF, and exits non-zero on any schema violation. I made this split deliberately after an earlier single-stage version let the model "fill in" empty template slots with fabricated bullets and occasionally rewrite the CSS — committing the model to JSON first makes fabrication and drift structurally impossible.
+
+How I used AI vs my own judgment: the LLM does exactly two things that require judgment — semantic match between the candidate's real experience and the JD, and translating that experience into the JD's vocabulary. Everything that must be correct rather than creative — layout, schema validation, PDF rendering, deduplication — is deterministic code the model can't touch. I also baked the candidate's 16 source files inline into a 170 KB system prompt so Sonnet reads the full history at once instead of issuing 16 sequential file-read round-trips, cutting 30–90 seconds and several thousand tokens per job.
+
+A few tradeoffs I chose consciously:
+
+A JSON file as the only datastore, no SQLite or Postgres — append-only, deduped on lookup by URL or company+title. For a single-operator tool, a migration framework would have been overhead with no payoff.
+Cost engineered to ~$0: I strip the API key from the spawned claude -p so it authenticates through the local Claude subscription session; parallel-5 caps concurrent processes to avoid rate-limit throttling; the threshold gate skips the ~30s Playwright render entirely for low-fit jobs; history dedup makes re-runs free.
+A force-generate path so the operator can override the model's score when they disagree, without re-running Phase 1.
+Outcome: shipped and used as a daily driver, with hundreds of JDs processed end to end. The architecture — LLM for judgment, deterministic code for everything that must be correct — is the part I'd carry into any production AI system.

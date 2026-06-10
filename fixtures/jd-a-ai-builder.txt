@@ -1,0 +1,32 @@
+AI Builder
+
+About the role
+AI Builders enter ambiguous enterprise problems with no defined solution, decide where
+AI can create practical value, build something real, and explain their reasoning and
+tradeoffs clearly. Strong AI Builders come from many backgrounds — software engineering,
+UX, operations, consulting, research, product, and self-taught paths. What every strong
+background shares is clear reasoning under ambiguity and constraint. We care more about
+what you can actually build and ship than about pedigree.
+
+What you'll do
+- Translate an open, poorly-defined business problem into a concrete AI solution.
+- Build working prototypes and production systems with modern AI tooling (LLMs, agents,
+  RAG, orchestration), not slideware.
+- Use AI with judgment: decide what to delegate to a model, verify and correct its output,
+  and put guardrails/evals around it.
+- Ship to real users and own the outcome end to end.
+- Communicate tradeoffs, assumptions, and risks to non-technical stakeholders.
+
+Hard requirements
+- Demonstrated experience building real AI/automation systems that shipped and were used.
+- Hands-on with LLMs and agentic/automation tooling.
+- Evidence of strong individual ownership — you built it, not just attended the project.
+- Clear reasoning under ambiguity.
+
+Preferred
+- Experience in regulated or high-volume enterprise operations.
+- Track record of measurable outcomes (time saved, productivity, adoption).
+- Comfort using AI tools to build, with transparency about how AI was used.
+
+Not required
+- A specific degree or school. Academic credentials are a minor signal at most.

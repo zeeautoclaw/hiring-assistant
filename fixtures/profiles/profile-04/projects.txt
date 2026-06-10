@@ -1,0 +1,6 @@
+PROJECT — Multi-agent orchestrator (re-submission)
+
+Same core work as my earlier application: I built a 60k-line three-brain orchestrator that
+coordinates worker subprocesses to build software, with a verifier brain that re-checks
+worker output before accepting it. I also maintain a 50-agent harness with hooks for
+auto-formatting and type-checking. Resubmitting with a tidied-up writeup.

@@ -1,0 +1,26 @@
+PROJECT 1 — AML investigation automation suite (Scotiabank)
+
+What it is: a set of automations that take routine steps out of an AML investigator's day —
+pulling customer data, pre-filling case templates, and routing alerts.
+
+What I personally did: I mapped the existing SOP step by step, identified which steps were
+mechanical, and built scripts to handle those while leaving judgment calls to the analyst.
+Outcome: investigator throughput went from ~1 to ~2 cases/day, and the automated steps saw
+roughly a 90% time reduction. I owned the SOP mapping and the rollout to the team.
+
+How I used AI: I used LLMs to draft the first-pass narrative of each case, but every
+narrative is reviewed by a human investigator before filing — regulators require it, and
+the model occasionally misstated a typology. So AI drafts, human approves.
+
+PROJECT 2 — 8-source compliance screening pipeline
+
+A screening pipeline that checks an entity across 8 public/registry sources and produces a
+20-column bilingual (EN/中) risk spreadsheet, with province-aware routing for Canadian
+jurisdictions. Built with UI.Vision + Python/Playwright. I designed the column schema with
+the compliance team so the output maps to what an auditor expects.
+
+PROJECT 3 — PwC AML automation portfolio
+
+Across 20+ engagements I introduced automation into investigation workflows, cutting
+investigation turnaround by ~50%. I managed the delivery pod (~100 people across Canada and
+Manila) and was accountable for quality and audit-readiness of the output.

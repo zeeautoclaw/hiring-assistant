@@ -1,0 +1,8 @@
+node_modules/
+.cache/
+*.db
+*.sqlite
+/tmp/
+.DS_Store
+*.app/
+ledger.db

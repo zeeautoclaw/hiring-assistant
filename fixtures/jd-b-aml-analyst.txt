@@ -1,0 +1,28 @@
+AML / Financial Crime Compliance Analyst
+
+About the role
+We are hiring an Anti-Money-Laundering (AML) and financial-crime compliance analyst to
+investigate alerts, perform KYC/CDD reviews, and prepare audit-ready case files in a
+heavily regulated banking environment. This is a domain-expertise role: depth in
+compliance process, regulatory rigor, and investigative quality matter most.
+
+What you'll do
+- Investigate transaction-monitoring and sanctions alerts; dispositions with full rationale.
+- Conduct KYC / customer due diligence and enhanced due diligence reviews.
+- Produce regulator-ready documentation that passes audit on the first pass.
+- Apply AML/KYC regulations, typologies, and internal SOPs consistently.
+- Work high alert volumes without sacrificing quality.
+
+Hard requirements
+- Direct AML / KYC / financial-crime investigation experience in a regulated institution.
+- Strong knowledge of AML regulation, sanctions screening, and case documentation standards.
+- Track record of high-quality, audit-passing compliance work at volume.
+- Meticulous, process-disciplined, detail-oriented.
+
+Preferred
+- Bilingual documentation ability.
+- Experience improving investigation turnaround or analyst productivity.
+- Familiarity with compliance tooling and case-management systems.
+
+Not the focus
+- Building novel software or AI systems is not the core of this role.

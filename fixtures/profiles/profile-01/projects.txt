@@ -1,0 +1,30 @@
+PROJECT 1 — zbcxnext, a 3-brain multi-agent orchestrator (60,912 lines, running in production)
+
+What it is: an autonomous build system where three "brain" agents (a planner on a
+stronger model, a task-splitter, and a verifier) coordinate a pool of worker subprocesses
+to build software from a spec.
+
+What I personally did: I designed the 3-brain state machine and wrote essentially all of
+the 60k lines myself. The hardest decision was how to isolate workers — I chose separate
+subprocesses over threads so a crashing worker can't take down the orchestrator.
+
+How I used AI, and where my own judgment came in: workers are LLM processes, but I do NOT
+trust their output blindly. I built a verifier brain that re-checks each worker's result
+against the spec before accepting it, because early on workers would "fill in" missing
+work with plausible-looking fabrication. I rejected the model's first design (one shared
+process) after it caused state bleed between tasks.
+
+A concrete debugging win: I diagnosed a 2,500× cost blowup that came from an environment
+variable leaking into spawn(), which caused workers to re-authenticate against the wrong
+endpoint on every call. I found it by diffing per-call token traces, not by guessing.
+
+Outcome: the system runs unattended and has built multiple real projects. Cost per run
+dropped ~2,500× after the spawn() fix.
+
+PROJECT 2 — A custom agent harness (50 agents, 73 commands, 34 hooks, 30 MCP servers)
+
+I built and maintain a harness that sustains ~530 tool invocations/day. I own the whole
+thing: the agent definitions, the hook system that auto-formats and type-checks on every
+edit, and the routing that sends cheap tasks to a small model and hard ones to a large one.
+Tradeoff I made consciously: more hooks = slower edits, so I cap the hook chain and only
+run the expensive build verification at session end, not on every keystroke.

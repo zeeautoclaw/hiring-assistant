@@ -1,0 +1,32 @@
+PROJECT — SOQUIJ court-records screening macro (compliance automation)
+
+What it is: a browser-automation macro that takes the manual Quebec court-records
+check out of the AML/KYC screening workflow.
+
+The problem: every file with a Quebec address requires a mandatory SOQUIJ court
+search. Analysts did it by hand — copy each name from the screening spreadsheet,
+switch to the SOQUIJ portal, pick the right tab (company vs individual), type the
+name, open the 2016+ and 2006+ date ranges in separate tabs, repeat. Across a batch
+of 30–50 parties that's 30–60 minutes of mechanical browser work per analyst per
+day, with copy-paste errors leaking through.
+
+What I personally built: a UI.Vision macro (~540 lines of JSON) that reads a
+single-column CSV row by row, parses a delimiter-encoded type marker, dispatches to
+the correct SOQUIJ tab, fills the cleaned name, and opens both date-range tabs before
+advancing. I designed a simple CSV protocol so analysts don't need to learn a schema:
+"^^^^Acme Inc" → company tab; "1^^^^Jean Tremblay" → individual tab; "0" → stop.
+
+A decision I had to make: UI.Vision's CSV reader wraps every cell in double-quotes.
+The obvious fix (a regex replace of all quotes) left a stray trailing quote that
+silently broke search-field matching in production. I switched to character-code
+stripping (charCodeAt(0)===34) on the leading and trailing quotes only, which I
+verified inside the actual UI.Vision runtime — an earlier attempt had been "debugged"
+in the Chrome console, which is a different environment, so the fix was never really
+tested. I wrote up that root cause so the next person wouldn't repeat it.
+
+Constraint I worked within: it had to run on the existing locked-down corporate
+Windows desktop with no new installs beyond the already-approved UI.Vision extension.
+
+Outcome: shipped to the AML/KYC operations team for daily production use. Companion
+macros in the same suite cover World-Check, BC Court, CanLII, and a federal database,
+all sharing the same CSV-driven protocol.

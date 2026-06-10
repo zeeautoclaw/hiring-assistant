@@ -1,0 +1,34 @@
+PROJECT — A personalized PDF tutor, shipped as a public web product
+
+What it is: a web app where a non-technical reader uploads a PDF (a textbook chapter,
+a paper, a long article) and learns from it with an AI tutor tuned to their level,
+preferred voice, and pace. It's live, founder-operated, with real users.
+
+The problem I was solving: generic "summarize this PDF" tools flatten the content, and
+generic chat-with-PDF strips the teacher affordances — diagrams, metaphors,
+"I didn't get it"-aware re-explanations. And because it's a real product with cost
+exposure, the LLM bill can run away, so cost ceilings, quotas, and cross-device sync
+had to be real features, not best-effort.
+
+What I personally built:
+- A 3-question onboarding (background / voice / pace) that assembles a personalized
+  system instruction persisted per user, rewritable live from settings with no
+  redeploy.
+- A planner pass that splits the PDF into named sections, then bounds each section's
+  conversation context to that section's text — which avoids both runaway context
+  cost and cross-section topic drift.
+- A server-side cost circuit breaker that returns a 503 maintenance page when a
+  configured spend ceiling is hit. The guardrail is enforced server-side, not just
+  monitored — I treated runaway LLM cost as a product risk, not an afterthought.
+- Row-level security in Postgres plus middleware so a user who navigates to another
+  user's document gets a 403 — privacy enforced at the data layer.
+
+How I used AI and where my judgment came in: I made the Claude call switch on whether
+an API key is present — production uses the billable SDK, local dev falls through to a
+`claude -p` subprocess at zero per-query cost. I also wrote a voice contract (every
+default reply must contain a diagram/table and a real-world metaphor) and asserted it
+with an automated grep over generated output, so voice drift is caught in CI rather
+than discovered by a user.
+
+Outcome: shipped public product. The build's pass/fail is reproducible from git alone
+because every acceptance item has committed evidence (screenshots, DB dumps, stdout).
