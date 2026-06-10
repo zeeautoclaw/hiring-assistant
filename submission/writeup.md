@@ -1,28 +1,72 @@
 # AI Builder Screening Agent
 **Zedong Sun — KPMG AI Builder Case Study**
 
-**Demo / repository:** [REPO LINK]  ·  **3-minute video:** [VIDEO LINK]
+**Demo / repository:** https://github.com/zeeautoclaw/hiring-assistant  ·  **3-minute video:** https://youtu.be/Xt9qx96ZWYw
 
 *All candidate data is synthetic or anonymized. No confidential data is used.*
 
 ---
 
+## What this is
+
+**Hiring Assistant** is an AI agent for screening AI Builder candidates. You give it
+a job description and a folder of candidate submissions — each a résumé plus an
+AI-project write-up. For every candidate it:
+
+- **checks the database to see whether they already applied in the last two
+  months**, and silently skips repeats so no one is reviewed twice;
+- **scores the new ones** on a seven-dimension, JD-derived rubric, with a cited
+  quote from the candidate behind every score;
+- **ranks them and writes a short summary** for those above the bar, then hands a
+  human reviewer an explainable shortlist — which it can auto-email to the hiring
+  manager.
+
+Three AI agents do the *judgment* (read the JD, score each candidate, write the
+summary); deterministic code does everything that must be *exact* (dedup,
+weighting, the pass/fail gate) — so the results are auditable and reproducible.
+It turned an open, ambiguous prompt into a working, tested system.
+
 ## 1. How I framed the problem
 
-The brief asks me to "evaluate an AI Builder well," but also says *"we are not
-hiring you to build hiring tools."* So I reframed.
+"Evaluate an AI Builder well" is a very broad prompt, so I started by putting
+myself in the shoes of the person who actually has this problem — a hiring team —
+and asked what they are really trying to do. The goal isn't "score people"; it's
+**find the right candidate.**
 
-The core AI-Builder skill — and one the KPMG JD explicitly names ("**design
-evaluations**") — is building evaluation systems for AI. So I built an
-**evaluation harness**, and used the act of building it to demonstrate the skill
-itself. The "evaluate a candidate" topic is the vehicle; the artifact is a real,
-reusable system for scoring open-ended submissions against any job description.
+That exposed the real problem: **traditional resume screening and keyword
+matching are a poor fit for hiring AI Builders.** You don't need a coding
+background or years of work experience to be a great AI Builder — the role itself
+says strong builders come from UX, ops, consulting, research, and self-taught
+paths. A keyword/resume filter would screen out exactly those people. So I worked
+it out in steps, and each step exposed the next problem:
 
-**The pain I optimized for:** open-ended candidate submissions are hard to
-evaluate *consistently, explainably, and at scale.* Three reviewers score the
-same submission differently, bias creeps in, and decisions aren't auditable. I
-optimized for **consistency + auditability + a human-owned decision**, not for a
-polished UI.
+1. **I need a better basis for scoring.** A resume alone isn't enough. So each
+   candidate submits a resume **plus an AI-project write-up** — what they actually
+   built — and the system weights project evidence above pedigree. *(Solves what
+   to evaluate on; resume still counts, just not as the whole story.)*
+
+2. **That still doesn't fix the keyword problem.** Often the keywords don't match
+   and the candidate is genuinely strong. So instead of matching strings, I use
+   **GenAI to understand the JD and the candidate's whole profile, and match on
+   meaning** — transferable skill, not vocabulary. *(Solves matching.)*
+
+3. **But understanding-based scoring brings its own problems** — bias,
+   inconsistency, and high token cost — so I made three deliberate choices:
+   - **The AI reads the JD once and writes a spec** (requirements + per-dimension
+     cues + weights). Every candidate is scored against that compact spec, so the
+     full JD is never re-read per candidate → controls **token cost**.
+   - **Every score must cite the candidate's own words** → prevents the model from
+     **fabricating** a reason, and makes each number auditable.
+   - **Consistency:** the rubric anchors are frozen so everyone is measured the
+     same way, and the design supports **scoring each profile multiple times and
+     taking the median** to damp model variance (a planned next step).
+
+4. **Efficiency:** scoring is the slow part, so candidates are **scored by
+   multiple AI agents running in parallel.**
+
+The result is an evaluation *system*, not a keyword filter: it scores what a
+builder actually built, matches on understanding, and stays auditable and
+reproducible — with a human making the final call.
 
 ## 2. What I built
 
@@ -30,17 +74,21 @@ A workflow with explicit human-AI handoffs, delivered as a native macOS app over
 a Node/TypeScript engine. It runs on a Claude subscription (`claude -p`), so the
 marginal cost is ~$0.
 
-```
-JD ─┐
-    ▼
-① distill JD (1 call) → spec + JD-derived weights
-② ingest candidates (résumé + project text)        [code, 0 tokens]
-③ dedup gate (persistent, phone/email, 2-month)     [code, 0 tokens]
-④ score: 1 call/candidate → 7 dims, 0–10, w/ evidence
-⑤ aggregate (weighted, deterministic)               [code, 0 tokens]
-⑥ gate at threshold → summary only for those above
-⑦ ranked, filterable table → HUMAN decides
-```
+<div style="text-align:center;font-size:9.3pt;line-height:1.25;margin:10pt 0;">
+  <div style="display:inline-block;border:1px solid #bbb;border-radius:5px;padding:4pt 9pt;background:#f3f4f6;">Upload JD + candidate folders &nbsp;<span style="color:#888;">[code]</span></div>
+  <div style="color:#aaa;">▼</div>
+  <div style="display:inline-block;border:1px solid #4c9a6a;border-radius:5px;padding:4pt 9pt;background:#edf6f0;"><b>🤖 Agent 1 · JD Distiller</b> — reads the JD <b>once</b> → spec + JD-derived weights</div>
+  <div style="color:#aaa;">▼</div>
+  <div style="display:inline-block;border:1px solid #bbb;border-radius:5px;padding:4pt 9pt;background:#f3f4f6;"><b>Dedup gate</b> — applied in the last 2 months? → silently skip repeats &nbsp;<span style="color:#888;">[code]</span></div>
+  <div style="color:#aaa;">▼</div>
+  <div style="display:inline-block;border:1px solid #4c9a6a;border-radius:5px;padding:4pt 9pt;background:#edf6f0;"><b>🤖 Agent 2 · Scorer</b> — 7 dimensions, 0–10, each with a cited quote · 1 call/candidate, run in parallel</div>
+  <div style="color:#aaa;">▼</div>
+  <div style="display:inline-block;border:1px solid #bbb;border-radius:5px;padding:4pt 9pt;background:#f3f4f6;"><b>Aggregate → weighted total</b>, then pass/fail at the threshold &nbsp;<span style="color:#888;">[code]</span></div>
+  <div style="color:#aaa;">▼</div>
+  <div style="display:inline-block;border:1px solid #4c9a6a;border-radius:5px;padding:4pt 9pt;background:#edf6f0;"><b>🤖 Agent 3 · Summarizer</b> — writes a reviewer summary (passers only)</div>
+  <div style="color:#aaa;">▼</div>
+  <div style="display:inline-block;border:1px solid #5379b0;border-radius:5px;padding:4pt 9pt;background:#eef2fb;"><b>Ranked table → human decides</b> · optional auto-email of the shortlist to HR</div>
+</div>
 
 The model only does **judgment** (semantic match + dimension scoring).
 Everything that must be *correct* — the weighted math, deduplication, the gate —
@@ -55,10 +103,18 @@ drops below the line, the compliance profile rises above it. An automated test
 fails if that flip doesn't happen, which guards against a silently hard-coded
 system.
 
-**Seven dimensions** (weights are JD-derived; defaults shown): JD-fit (0.30),
-AI-judgment (0.20), impact (0.15), complexity (0.12), ownership (0.12),
-reasoning (0.08), pedigree (0.03 — deliberately tiny). Each is scored 0–10
-against fixed anchors with a required evidence quote.
+**Seven scoring dimensions** — weights are derived from each JD (defaults shown).
+Each is scored 0–10 against fixed anchors, with a required evidence quote:
+
+| # | Dimension | What it measures | Default weight |
+|---|---|---|---|
+| 1 | jd_fit | Whether the candidate's skills/methodologies match the JD's hard requirements (skill transfer, not keyword matching) | 0.30 |
+| 2 | ai_judgment ⭐ | How they use AI: clear human/AI boundary, evidence of correcting or overriding AI, mention of verification/evals | 0.20 |
+| 3 | impact | Did it ship? Real users? Quantified outcomes? | 0.15 |
+| 4 | complexity | How hard the problem was (absolute ladder, independent of the JD) | 0.12 |
+| 5 | ownership | How much they personally drove the work (specific first-person actions vs vague "we") | 0.12 |
+| 6 | reasoning | Clarity of reasoning under ambiguity: alternatives, tradeoffs, limits (judge the logic, not the prose) | 0.08 |
+| 7 | pedigree | School prestige + academic level (deliberately a tiny signal) | 0.03 |
 
 ## 3. Key decisions & tradeoffs (what I deliberately left out)
 
