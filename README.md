@@ -91,5 +91,5 @@ scope and noted as concepts.
 src/   types (contracts) · rubric (frozen) · prompts · agents (LLM) · dedup · aggregate
        · db (sqlite ledger) · ingest · pipeline (orchestrator) · cli · llm (claude -p client)
 fixtures/  jd-a · jd-b · profiles/profile-01..05
-demo/     unit/ · invariants
+draft/    unit/ · invariants
 ```
