@@ -6,8 +6,8 @@
   "description": "Evidence-based, dedup-aware candidate screening harness that scores submissions against a runtime job description. AI ranks and explains; humans decide.",
   "scripts": {
     "run": "node --experimental-sqlite --no-warnings --import tsx src/cli.ts",
-    "test": "node --experimental-sqlite --no-warnings --test --import tsx tests/unit/*.test.ts tests/*.test.ts",
-    "test:unit": "node --experimental-sqlite --no-warnings --test --import tsx tests/unit/*.test.ts"
+    "test": "node --experimental-sqlite --no-warnings --test --import tsx demo/unit/*.test.ts demo/*.test.ts",
+    "test:unit": "node --experimental-sqlite --no-warnings --test --import tsx demo/unit/*.test.ts"
   },
   "dependencies": {
     "@types/node": "^25.9.2",

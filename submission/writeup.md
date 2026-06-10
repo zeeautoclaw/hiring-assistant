@@ -7,6 +7,20 @@
 
 ---
 
+## Contents
+
+<div class="toc">
+<div class="toc-row"><span>What this is</span><span class="dots"></span><span class="pg" data-h="What this is"></span></div>
+<div class="toc-row"><span>1 · How I framed the problem</span><span class="dots"></span><span class="pg" data-h="1."></span></div>
+<div class="toc-row"><span>2 · What I built</span><span class="dots"></span><span class="pg" data-h="2."></span></div>
+<div class="toc-row"><span>3 · Key decisions &amp; tradeoffs</span><span class="dots"></span><span class="pg" data-h="3."></span></div>
+<div class="toc-row"><span>4 · Responsible AI</span><span class="dots"></span><span class="pg" data-h="4."></span></div>
+<div class="toc-row"><span>5 · Risks &amp; what I'd do next</span><span class="dots"></span><span class="pg" data-h="5."></span></div>
+<div class="toc-row"><span>6 · How I used AI vs. my own decisions</span><span class="dots"></span><span class="pg" data-h="6."></span></div>
+<div class="toc-row"><span>7 · Running it</span><span class="dots"></span><span class="pg" data-h="7."></span></div>
+<div class="toc-row"><span>Appendix A · From brief to delivery</span><span class="dots"></span><span class="pg" data-h="Appendix A"></span></div>
+</div>
+
 ## What this is
 
 **Hiring Assistant** is an AI agent for screening AI Builder candidates. You give it
@@ -164,3 +178,26 @@ injection) that prove the system behaves as claimed.
 See `README.md` in the repo. In short: `npm install`, then
 `npm run -- --jd <jd.txt> --profiles <folder> --threshold 6`. 19 tests run fully
 offline via record-replay (`npm test`). The macOS app wraps the same engine.
+
+## Appendix A — From brief to delivery
+
+The seven phases this work moved through. The first four are think-it-through
+phases; the last three are build-and-ship.
+
+<svg width="100%" viewBox="0 0 680 548" xmlns="http://www.w3.org/2000/svg" style="margin:6pt 0;">
+  <g><rect x="6" y="8" width="668" height="52" rx="9" fill="#eaf2fb" stroke="#9cbfe6"/><text x="20" y="30" font-size="12.5" font-weight="700" fill="#14324e">1 · Understand the brief</text><text x="20" y="48" font-size="9.6" fill="#3a5563">Read the KPMG brief; pin down what's assessed (ambiguity→direction · builder mindset · responsible AI) and the constraints</text></g>
+  <text x="340" y="74" font-size="11" fill="#b9b9b9" text-anchor="middle">▼</text>
+  <g><rect x="6" y="80" width="668" height="52" rx="9" fill="#eaf2fb" stroke="#9cbfe6"/><text x="20" y="102" font-size="12.5" font-weight="700" fill="#14324e">2 · Frame the problem (reframe)</text><text x="20" y="120" font-size="9.6" fill="#3a5563">Traditional keyword/resume screening is a poor fit for AI Builders → the real goal: find the right candidate</text></g>
+  <text x="340" y="146" font-size="11" fill="#b9b9b9" text-anchor="middle">▼</text>
+  <g><rect x="6" y="152" width="668" height="52" rx="9" fill="#eaf2fb" stroke="#9cbfe6"/><text x="20" y="174" font-size="12.5" font-weight="700" fill="#14324e">3 · Design the approach</text><text x="20" y="192" font-size="9.6" fill="#3a5563">Resume + AI-project file · GenAI semantic match · 7 dims + JD-derived weights · dedup · human decides (studied Radar.app)</text></g>
+  <text x="340" y="218" font-size="11" fill="#b9b9b9" text-anchor="middle">▼</text>
+  <g><rect x="6" y="224" width="668" height="52" rx="9" fill="#eaf2fb" stroke="#9cbfe6"/><text x="20" y="246" font-size="12.5" font-weight="700" fill="#14324e">4 · Harness tradeoffs</text><text x="20" y="264" font-size="9.6" fill="#3a5563">3 agents · distill JD into a spec once · cite evidence per score · parallel · judgment→AI, math→code · cache to save tokens</text></g>
+  <text x="340" y="290" font-size="11" fill="#b9b9b9" text-anchor="middle">▼</text>
+  <g><rect x="6" y="296" width="668" height="52" rx="9" fill="#ecf6ef" stroke="#93c8a6"/><text x="20" y="318" font-size="12.5" font-weight="700" fill="#14463a">5 · Build the engine</text><text x="20" y="336" font-size="9.6" fill="#3a5e50">Node/TS, 11 modules + 5 synthetic profiles + 19 tests · fixed 3 bugs · proved dynamic≠frozen (ranking flips when the JD changes)</text></g>
+  <text x="340" y="362" font-size="11" fill="#b9b9b9" text-anchor="middle">▼</text>
+  <g><rect x="6" y="368" width="668" height="52" rx="9" fill="#ecf6ef" stroke="#93c8a6"/><text x="20" y="390" font-size="12.5" font-weight="700" fill="#14463a">6 · Build the app (Hiring Assistant)</text><text x="20" y="408" font-size="9.6" fill="#3a5e50">SwiftUI table / view / advance · persistent dedup + silent skip · email + auto-send the shortlist when a run finishes</text></g>
+  <text x="340" y="434" font-size="11" fill="#b9b9b9" text-anchor="middle">▼</text>
+  <g><rect x="6" y="440" width="668" height="52" rx="9" fill="#ecf6ef" stroke="#93c8a6"/><text x="20" y="462" font-size="12.5" font-weight="700" fill="#14463a">7 · Deliver</text><text x="20" y="480" font-size="9.6" fill="#3a5e50">writeup → PDF · public GitHub repo · video link · 7-dimension table + visual workflow</text></g>
+  <text x="20" y="520" font-size="9.5" fill="#3a5563">🔵 Think it through (understand · frame · design · harness)　　🟢 Build it (engine · app · deliver)</text>
+</svg>
+
